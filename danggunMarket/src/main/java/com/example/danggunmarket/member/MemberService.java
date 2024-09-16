@@ -1,0 +1,38 @@
+package com.example.danggunmarket.member;
+
+import com.example.danggunmarket.member.dto.JoinRequest;
+import com.example.danggunmarket.member.exception.AlreadyExistException;
+import com.example.danggunmarket.member.exception.MemberErrorCode;
+import com.example.danggunmarket.member.mapper.MemberMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class MemberService {
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public void join(JoinRequest joinRequest){
+        String encodePassword = passwordEncoder.encode(joinRequest.getPassword());
+        joinRequest.setEncodePassword(encodePassword);
+
+        MemberEntity member = MemberMapper.INSTANCE.toEntity(joinRequest);
+
+        memberRepository.save(member);
+
+    }
+
+    public void isDuplicatedEmail(String email){
+        if(memberRepository.existsByEmail(email)){
+            throw new AlreadyExistException(MemberErrorCode.ALREADY_EXIST_NICKNAME);
+        }
+    }
+
+    public void isDuplicatedNickname(String nickname){
+        if(memberRepository.existsByNickname(nickname)){
+            throw new AlreadyExistException(MemberErrorCode.ALREADY_EXIST_NICKNAME);
+        }
+    }
+}
