@@ -18,7 +18,7 @@ public class SecurityConfig {
         security.csrf(CsrfConfigurer::disable);
 
         security.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/v1/signup", "/v1/check/**").permitAll();
+            auth.requestMatchers("/v1/members/**").permitAll();
         });
 
 
