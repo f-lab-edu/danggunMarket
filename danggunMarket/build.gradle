@@ -36,7 +36,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mapstruct/mapstruct
     implementation 'org.mapstruct:mapstruct:1.6.0'
     // https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
-    implementation 'org.mapstruct:mapstruct-processor:1.6.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.0'
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
