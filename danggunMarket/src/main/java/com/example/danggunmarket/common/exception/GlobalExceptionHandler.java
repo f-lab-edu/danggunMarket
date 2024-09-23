@@ -2,6 +2,7 @@ package com.example.danggunmarket.common.exception;
 
 import com.example.danggunmarket.common.exception.dto.ResultError;
 import com.example.danggunmarket.member.exception.AlreadyExistException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,6 +21,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(new ResultError<>(errorCode.getMessage()));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ResultError<String>> constraintException(ConstraintViolationException exception) {
+        String message = exception.getKind().name();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ResultError<>(message));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
