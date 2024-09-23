@@ -38,7 +38,7 @@ public class JoinRequest {
 
     @Builder
     public JoinRequest(String email, String password, String nickname, String name, String telNumber,
-                       String city, String street, String detail, int zipCode) {
+                       String city, String street, String detail, String zipCode) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -47,7 +47,7 @@ public class JoinRequest {
         this.homeAddress = setAddress(city, street, detail, zipCode);
     }
 
-    private Address setAddress(String city, String street, String detail, int zipCode){
+    private Address setAddress(String city, String street, String detail, String zipCode){
         return Address.builder()
                 .city(city)
                 .street(street)
