@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/v1/members")
+    @PostMapping("/v1/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody JoinRequest joinRequest) {
         memberService.join(joinRequest);
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/v1/members/check-email")
+    @GetMapping("/v1/check/email")
     public ResponseEntity<Void> checkExistEmail(@RequestParam String email) {
         memberService.isDuplicatedEmail(email);
 
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/v1/members/check-nickname")
+    @GetMapping("/v1/check/nickname")
     public ResponseEntity<Void> checkExistNickname(@RequestParam String nickname) {
         memberService.isDuplicatedEmail(nickname);
 
