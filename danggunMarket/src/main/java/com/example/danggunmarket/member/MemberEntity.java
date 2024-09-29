@@ -26,6 +26,7 @@ public class MemberEntity extends BaseEntity {
     private String password;
     private String telNumber;
 
+    private MemberRole role;
     @Embedded
     private Address homeAddress;
 
@@ -39,5 +40,6 @@ public class MemberEntity extends BaseEntity {
         this.password = password;
         this.telNumber = telNumber;
         this.homeAddress = homeAddress;
+        this.role = MemberRole.ROLE_MEMBER;
     }
 }
