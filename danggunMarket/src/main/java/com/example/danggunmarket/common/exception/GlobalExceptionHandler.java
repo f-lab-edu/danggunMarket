@@ -1,7 +1,6 @@
 package com.example.danggunmarket.common.exception;
 
 import com.example.danggunmarket.common.exception.dto.ResultError;
-import com.example.danggunmarket.member.exception.AlreadyExistException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AlreadyExistException.class)
-    public ResponseEntity<ResultError<String>> alreadyExistException(AlreadyExistException exception) {
+    @ExceptionHandler(DanggunMarketException.class)
+    public ResponseEntity<ResultError<String>> alreadyExistException(DanggunMarketException exception) {
         ErrorCode errorCode = exception.getErrorCode();
 
         return ResponseEntity.status(errorCode.getStatusCode())
