@@ -1,8 +1,11 @@
 package com.example.danggunmarket.member;
 
 import com.example.danggunmarket.member.dto.JoinRequest;
+import com.example.danggunmarket.member.dto.LoginRequest;
+import com.example.danggunmarket.member.dto.LoginResponse;
 import com.example.danggunmarket.member.exception.AlreadyExistException;
 import com.example.danggunmarket.member.exception.MemberErrorCode;
+import com.example.danggunmarket.member.exception.WrongPasswordException;
 import com.example.danggunmarket.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void join(JoinRequest joinRequest){
+    public void join(JoinRequest joinRequest) {
         String encodePassword = passwordEncoder.encode(joinRequest.getPassword());
         joinRequest.setEncodePassword(encodePassword);
 
@@ -24,15 +27,33 @@ public class MemberService {
 
     }
 
-    public void isDuplicatedEmail(String email){
-        if(memberRepository.existsByEmail(email)){
+    public void isDuplicatedEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
             throw new AlreadyExistException(MemberErrorCode.ALREADY_EXIST_NICKNAME);
         }
     }
 
-    public void isDuplicatedNickname(String nickname){
-        if(memberRepository.existsByNickname(nickname)){
+    public void isDuplicatedNickname(String nickname) {
+        if (memberRepository.existsByNickname(nickname)) {
             throw new AlreadyExistException(MemberErrorCode.ALREADY_EXIST_NICKNAME);
         }
+    }
+
+    public LoginResponse login(LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+
+        System.out.println(email);
+
+        System.out.println(memberRepository.existsByEmail(email));
+
+
+        MemberEntity member = memberRepository.findById(1L)
+                .orElseThrow(() -> new WrongPasswordException(MemberErrorCode.NOT_MATCHED_PASSWORD));
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
+            throw new WrongPasswordException(MemberErrorCode.NOT_MATCHED_PASSWORD);
+        }
+
+        return new LoginResponse(member.getNickname(), member.getEmail());
     }
 }
