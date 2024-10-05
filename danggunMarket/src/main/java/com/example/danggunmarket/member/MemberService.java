@@ -40,13 +40,6 @@ public class MemberService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-
-        System.out.println(email);
-
-        System.out.println(memberRepository.existsByEmail(email));
-
-
         MemberEntity member = memberRepository.findById(1L)
                 .orElseThrow(() -> new WrongPasswordException(MemberErrorCode.NOT_MATCHED_PASSWORD));
 
