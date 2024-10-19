@@ -41,7 +41,7 @@ public class MemberController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response){
         LoginResponse loginResponse = memberService.login(loginRequest);
 
-        response.addHeader("Authorization", jwtUtil.createToken(loginResponse.getEmail()));
+        response.addHeader("Authorization", "Bearer " + jwtUtil.createToken(loginResponse.getEmail()));
 
         return ResponseEntity.ok(loginResponse);
     }
