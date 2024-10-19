@@ -5,6 +5,7 @@ import com.example.danggunmarket.member.dto.LoginRequest;
 import com.example.danggunmarket.member.dto.LoginResponse;
 import com.example.danggunmarket.member.exception.AlreadyExistException;
 import com.example.danggunmarket.member.exception.MemberErrorCode;
+import com.example.danggunmarket.member.exception.MemberNotFoundException;
 import com.example.danggunmarket.member.exception.WrongPasswordException;
 import com.example.danggunmarket.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,8 @@ public class MemberService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        MemberEntity member = memberRepository.findById(1L)
-                .orElseThrow(() -> new WrongPasswordException(MemberErrorCode.NOT_MATCHED_PASSWORD));
+        MemberEntity member = memberRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.NOT_FOUND_MEMBER));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new WrongPasswordException(MemberErrorCode.NOT_MATCHED_PASSWORD);
