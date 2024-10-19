@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MemberEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long memberId;
     private String name;
 
     @Column(unique = true)
@@ -26,6 +26,7 @@ public class MemberEntity extends BaseEntity {
     private String password;
     private String telNumber;
 
+    @Enumerated(EnumType.STRING)
     private MemberRole role;
     @Embedded
     private Address homeAddress;

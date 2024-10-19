@@ -53,9 +53,10 @@ public class SecurityConfig {
                     .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.NOT_FOUND_MEMBER));
 
             return LoggedInMember.builder()
-                    .id(member.getId())
+                    .id(member.getMemberId())
                     .role(member.getRole())
                     .nickname(member.getNickname())
+                    .email(member.getEmail())
                     .build();
         };
     }
@@ -76,7 +77,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
