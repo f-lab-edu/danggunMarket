@@ -10,6 +10,7 @@ import com.example.danggunmarket.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -40,6 +41,8 @@ public class SecurityConfig {
 
         security.authorizeHttpRequests(auth -> {
             auth.requestMatchers("/v1/members/**", "/v1/login").permitAll();
+            auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+            auth.requestMatchers(HttpMethod.GET, "/v1/products/**").permitAll();
             auth.anyRequest().authenticated();
         });
 

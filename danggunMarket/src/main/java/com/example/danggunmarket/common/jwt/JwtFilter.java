@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         LoggedInMember loggedInMember = (LoggedInMember) userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(loggedInMember.getUsername(), null, loggedInMember.getAuthorities());
+                new UsernamePasswordAuthenticationToken(loggedInMember, null, loggedInMember.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
@@ -51,6 +52,11 @@ public class JwtFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         final String[] excludePath = {"/v1/members", "/v1/login"};
+        final String[] getPath = {"/v1/products"};
+
+        if(request.getMethod().equals(HttpMethod.GET.name())){
+            return Arrays.stream(getPath).anyMatch(uri::startsWith);
+        }
 
         return Arrays.stream(excludePath).anyMatch(uri::startsWith);
     }
