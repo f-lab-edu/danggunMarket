@@ -50,4 +50,9 @@ public class MemberService {
 
         return new LoginResponse(member.getNickname(), member.getEmail());
     }
+
+    public MemberEntity findById(long id){
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException(MemberErrorCode.NOT_FOUND_MEMBER));
+    }
 }
