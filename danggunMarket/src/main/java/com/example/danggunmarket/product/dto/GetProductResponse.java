@@ -11,7 +11,7 @@ import lombok.*;
 public class GetProductResponse {
     private String name;
     private String seller;
-    private long id;
+    private long productId;
     private int price;
     private String picturePath;
 }
