@@ -49,11 +49,11 @@ public class ProductController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/v1/products/{id}")
+    @PutMapping("/v1/products/{id}")
     public ResponseEntity<GetProductDetailResponse> modifyProduct(@PathVariable("id") long id,
                                                                   @RequestBody EditProductRequest request) {
         GetProductDetailResponse response = productService.editProduct(id, request);
-        return ResponseEntity.ok().body(productService.getProductDetailResponse(id));
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/v1/products/{id}")
