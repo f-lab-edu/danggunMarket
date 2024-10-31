@@ -4,15 +4,30 @@ import lombok.Getter;
 
 @Getter
 public enum CacheType {
-    Main_PAGE("mainPage", 1, 1000);
+    MAIN_PAGE("mainPage", 1, 1000, ExpireType.EXPIRE_AFTER_WRITE);
 
-    CacheType(String cacheName, int expireAfterWrite, int maximumSize) {
+    CacheType(String cacheName, int expireTime, int maximumSize, ExpireType expireType) {
         this.cacheName = cacheName;
-        this.expireAfterWrite = expireAfterWrite;
+        this.expireTime = expireTime;
         this.maximumSize = maximumSize;
+        this.expireType = expireType;
     }
 
     private final String cacheName;
-    private final int expireAfterWrite;
+    private final int expireTime;
     private final int maximumSize;
+    private final ExpireType expireType;
+
+    public boolean isExpireAfterWrite(){
+        return expireType == ExpireType.EXPIRE_AFTER_WRITE;
+    }
+
+    public boolean isAccessAfterWrite(){
+        return expireType == ExpireType.ACCESS_AFTER_WRITE;
+    }
+
+    public enum ExpireType{
+        EXPIRE_AFTER_WRITE,
+        ACCESS_AFTER_WRITE
+    }
 }
