@@ -12,35 +12,38 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
 @Component
 @RequiredArgsConstructor
 public class ValidAuthorizeProductInterceptor implements HandlerInterceptor {
     private final ProductService productService;
+    private final String pattern = "/v1/products/{productId}";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String method = request.getMethod();
 
-        if (!method.equals(HttpMethod.POST.name()) && !method.equals(HttpMethod.DELETE.name())) {
+        if (!method.equals(HttpMethod.PUT.name()) && !method.equals(HttpMethod.DELETE.name())) {
             return true;
         }
 
-        UriComponents uri = UriComponentsBuilder.fromUriString(request.getRequestURI()).build();
-        long id;
+        UriTemplate uriTemplate = new UriTemplate(pattern);
+        if (!uriTemplate.matches(request.getRequestURI()))
+            return true;
 
+        String productId = uriTemplate.match(request.getRequestURI()).get("productId");
         try {
-            id = Long.parseLong(uri.getPathSegments().get(2));
+            long id = Long.parseLong(productId);
+
+            LoggedInMember member = (LoggedInMember) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            if (!productService.matchSellerByUser(id, member))
+                throw new NotAuthorizedProductException(ProductErrorCode.NOT_AUTHORIZED_PRODUCT);
+
         } catch (NumberFormatException | IndexOutOfBoundsException ex) {
             throw new InValidProductIdException(ProductErrorCode.NOT_VALID_ID);
         }
-
-        LoggedInMember member = (LoggedInMember) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!productService.matchSellerByUser(id, member))
-            throw new NotAuthorizedProductException(ProductErrorCode.NOT_AUTHORIZED_PRODUCT);
 
         return true;
     }
