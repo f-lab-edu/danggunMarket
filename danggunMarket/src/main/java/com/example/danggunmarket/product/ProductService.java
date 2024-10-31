@@ -75,7 +75,7 @@ public class ProductService {
     public GetProductDetailResponse getProductDetailResponse(long id) {
 
         ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_PRODUCT));
 
         GetProductDetailResponse response = ProductMapper.INSTANCE.toGetDetailDto(product);
         response.setSeller(product.getMember().getNickname());
@@ -84,9 +84,9 @@ public class ProductService {
     }
 
     @Transactional
-    public GetProductDetailResponse editProduct(long id, EditProductRequest request){
+    public GetProductDetailResponse editProduct(long id, EditProductRequest request) {
         ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_PRODUCT));
 
         product.update(request.getName(), request.getDescription(), request.getPrice());
 
@@ -94,9 +94,9 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(long id){
+    public void deleteProduct(long id) {
         ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_PRODUCT));
 
         product.setDeleted();
     }
@@ -105,9 +105,9 @@ public class ProductService {
         return productRepository.existsById(id);
     }
 
-    public boolean matchSellerByUser(long id, LoggedInMember loggedInMember){
+    public boolean matchSellerByUser(long id, LoggedInMember loggedInMember) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_MEMBER))
+                .orElseThrow(() -> new ProductNotFoundException(ProductErrorCode.NOT_FOUND_PRODUCT))
                 .getMember().getMemberId() == loggedInMember.getId();
     }
 }
