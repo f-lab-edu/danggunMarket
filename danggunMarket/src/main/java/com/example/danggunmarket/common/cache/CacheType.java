@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CacheType {
-    MAIN_PAGE("mainPage", 1, 1000, ExpireType.EXPIRE_AFTER_WRITE);
+    MAIN_PAGE("mainPage", 2, 1000, ExpireType.EXPIRE_AFTER_WRITE);
 
     CacheType(String cacheName, int expireTime, int maximumSize, ExpireType expireType) {
         this.cacheName = cacheName;
